@@ -1,9 +1,12 @@
 package com.example.menusample;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class MenuThanksActivity extends AppCompatActivity {
@@ -31,11 +34,19 @@ public class MenuThanksActivity extends AppCompatActivity {
         tvMenuName.setText(menuName);
         tvMenuPrice.setText(menuPrice);
 
+        // アクションバーを取得
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    // 戻るボタンをタップ
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
 
-    public void onbackButton(View view) {
-        finish();
+        if (itemId == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

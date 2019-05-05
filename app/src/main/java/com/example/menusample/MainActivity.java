@@ -1,13 +1,13 @@
 package com.example.menusample;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.app.LauncherActivity;
 import android.content.Intent;
-import android.support.v4.util.ArrayMap;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -55,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         _lvMenu.setAdapter(adapter);
         _lvMenu.setOnItemClickListener(new ListItemClickListener());
 
+        // アクションバーを取得
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     private List<Map<String, Object>> createTeishokuList() {
@@ -76,6 +79,27 @@ public class MainActivity extends AppCompatActivity {
 
         return menuList;
     }
+
+    private List<Map<String, Object>> createCurryList() {
+        // SimpleAdapterで使用するListオブジェクトを用意。
+        List<Map<String, Object>> menuList = new ArrayList<>();
+
+        // 定食のデータを格納する
+        Map<String, Object> menu = new HashMap<>();
+        menu.put("name", "ビーフカレー");
+        menu.put("price", 300);
+        menu.put("desc", "特選スパイスをきかせました");
+        menuList.add(menu);
+
+        menu = new HashMap<>();
+        menu.put("name", "ポークカレー");
+        menu.put("price", 940);
+        menu.put("desc", "スパイスがきいています");
+        menuList.add(menu);
+
+        return menuList;
+    }
+
 
     private class ListItemClickListener implements android.widget.AdapterView.OnItemClickListener {
 
@@ -100,5 +124,43 @@ public class MainActivity extends AppCompatActivity {
 
             startActivity(intent);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_options_menu_list, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == android.R.id.home) {
+            finish();
+        }
+
+        switch (itemId) {
+
+            case R.id.menuListOptionTeishoku:
+                _menuList = createTeishokuList();
+                break;
+            case R.id.menuListOptionCurry:
+                _menuList = createCurryList();
+                break;
+        }
+
+        // SimpleAdapterの生成
+
+        SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, _menuList,
+                R.layout.row, FROM, TO);
+
+        // アダプタの登録
+        _lvMenu.setAdapter(adapter);
+
+        //_lvMenu.setOnItemClickListener(new ListItemClickListener()); はonCreateですでに登録されている。
+
+        return super.onOptionsItemSelected(item);
     }
 }
